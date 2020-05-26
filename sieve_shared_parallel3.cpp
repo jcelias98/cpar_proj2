@@ -4,14 +4,21 @@
 #include <math.h>
 #include <omp.h>
 
-#define THREADS 8
 using namespace std;
 
 int main (int argc, char *argv[])
 {
-    clock_t start, end;
+    int THREADS = omp_get_num_procs();
+
+    double start, end;
     double cpu_time_used;
     long long n;
+
+    int a;
+    cout << "Num. of Threads: ";
+    cin >> a;
+
+    if(a) THREADS = a;
     
     cout << "Power of 2: ";
     cin >> n;
@@ -24,11 +31,11 @@ int main (int argc, char *argv[])
     long long j;
     
     start = omp_get_wtime();
-    #pragma omp parallel private(j) 
+    #pragma omp parallel num_threads(THREADS) private(j)
     do
     {
         //#pragma omp parallel for schedule (static, 3) num_threads(THREADS)
-        # pragma omp parallel for schedule (static, 8)
+        #pragma omp parallel for schedule (static, 8)
         //mark all odd multiples of k between k^2 and n
         for (j = k*k ; j<n ; j+=2*k) //fast marking
         {   notprimes[j>>1]=true;

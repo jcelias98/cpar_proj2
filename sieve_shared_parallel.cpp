@@ -1,6 +1,5 @@
 #include <iostream>
 #include <iomanip>
-#include <time.h>
 #include <math.h>
 #include <omp.h>
 
@@ -8,9 +7,17 @@ using namespace std;
 
 int main (int argc, char *argv[])
 {
-    clock_t start, end;
+    int THREADS = omp_get_num_procs(); 
+
+    double start, end;
     double cpu_time_used;
     long long n;
+
+    int a;
+    cout << "Num. of Threads: ";
+    cin >> a;
+
+    if(a) THREADS = a;
     
     cout << "Power of 2: ";
     cin >> n;
@@ -23,7 +30,7 @@ int main (int argc, char *argv[])
     long long j;
     
     start = omp_get_wtime();
-    #pragma omp parallel private(j)
+    #pragma omp parallel num_threads(THREADS) private(j)
     do
     {
         #pragma omp parallel for 
